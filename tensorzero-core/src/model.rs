@@ -54,7 +54,7 @@ use crate::providers::{
     anthropic::AnthropicProvider, aws_bedrock::AWSBedrockProvider, azure::AzureProvider,
     deepseek::DeepSeekProvider, fireworks::FireworksProvider,
     gcp_vertex_anthropic::GCPVertexAnthropicProvider, gcp_vertex_gemini::GCPVertexGeminiProvider,
-    groq::GroqProvider, mistral::MistralProvider, openai::OpenAIProvider,
+    groq::GroqProvider, mistral::MistralProvider, nvidia_nim::NvidiaNimProvider, openai::OpenAIProvider,
     openrouter::OpenRouterProvider, together::TogetherProvider, vllm::VLLMProvider,
     xai::XAIProvider,
 };
@@ -684,6 +684,7 @@ impl ModelProvider {
             ProviderConfig::TGI(_) => "tgi",
             ProviderConfig::SGLang(_) => "sglang",
             ProviderConfig::DeepSeek(_) => "deepseek",
+            ProviderConfig::NvidiaNim(_) => "nvidia_nim",
             #[cfg(any(test, feature = "e2e_tests"))]
             ProviderConfig::Dummy(_) => "dummy",
         }
@@ -713,6 +714,8 @@ impl ModelProvider {
             ProviderConfig::TGI(_) => None,
             ProviderConfig::SGLang(provider) => Some(provider.model_name()),
             ProviderConfig::DeepSeek(provider) => Some(provider.model_name()),
+            ProviderConfig::NvidiaNim(provider) => Some(provider.model_name()),
+
             #[cfg(any(test, feature = "e2e_tests"))]
             ProviderConfig::Dummy(provider) => Some(provider.model_name()),
         }
@@ -757,6 +760,7 @@ pub enum ProviderConfig {
     Together(TogetherProvider),
     VLLM(VLLMProvider),
     XAI(XAIProvider),
+    NvidiaNim(NvidiaNimProvider),
     #[cfg(any(test, feature = "e2e_tests"))]
     Dummy(DummyProvider),
 }
@@ -903,6 +907,13 @@ pub enum UninitializedProviderConfig {
         api_key_location: Option<CredentialLocation>,
     },
     DeepSeek {
+        model_name: String,
+        #[cfg_attr(test, ts(type = "string | null"))]
+        api_key_location: Option<CredentialLocation>,
+    },
+    #[strum(serialize = "nvidia_nim")]
+    #[serde(rename = "nvidia_nim")]
+    NvidiaNim {
         model_name: String,
         #[cfg_attr(test, ts(type = "string | null"))]
         api_key_location: Option<CredentialLocation>,
@@ -1093,6 +1104,10 @@ impl UninitializedProviderConfig {
                 model_name,
                 api_key_location,
             } => ProviderConfig::DeepSeek(DeepSeekProvider::new(model_name, api_key_location)?),
+            UninitializedProviderConfig::NvidiaNim {
+                model_name,
+                api_key_location,
+            } => ProviderConfig::NvidiaNim(NvidiaNimProvider::new(model_name, api_key_location)?),
             #[cfg(any(test, feature = "e2e_tests"))]
             UninitializedProviderConfig::Dummy {
                 model_name,
@@ -1174,6 +1189,9 @@ impl ModelProvider {
             ProviderConfig::DeepSeek(provider) => {
                 provider.infer(request, client, api_keys, self).await
             }
+            ProviderConfig::NvidiaNim(provider) => {
+                provider.infer(request, client, api_keys, self).await
+            }
             #[cfg(any(test, feature = "e2e_tests"))]
             ProviderConfig::Dummy(provider) => {
                 provider.infer(request, client, api_keys, self).await
@@ -1248,6 +1266,9 @@ impl ModelProvider {
                 provider.infer_stream(request, client, api_keys, self).await
             }
             ProviderConfig::DeepSeek(provider) => {
+                provider.infer_stream(request, client, api_keys, self).await
+            }
+            ProviderConfig::NvidiaNim(provider) => {
                 provider.infer_stream(request, client, api_keys, self).await
             }
             #[cfg(any(test, feature = "e2e_tests"))]
@@ -1368,6 +1389,11 @@ impl ModelProvider {
                     .start_batch_inference(requests, client, api_keys)
                     .await
             }
+            ProviderConfig::NvidiaNim(provider) => {
+                provider
+                    .start_batch_inference(requests, client, api_keys)
+                    .await
+            }
             #[cfg(any(test, feature = "e2e_tests"))]
             ProviderConfig::Dummy(provider) => {
                 provider
@@ -1475,6 +1501,11 @@ impl ModelProvider {
                     .await
             }
             ProviderConfig::DeepSeek(provider) => {
+                provider
+                    .poll_batch_inference(batch_request, http_client, dynamic_api_keys)
+                    .await
+            }
+            ProviderConfig::NvidiaNim(provider) => {
                 provider
                     .poll_batch_inference(batch_request, http_client, dynamic_api_keys)
                     .await
@@ -1732,6 +1763,7 @@ const SHORTHAND_MODEL_PREFIXES: &[&str] = &[
     "openrouter::",
     "together::",
     "xai::",
+    "nvidia_nim::",
     "dummy::",
 ];
 
@@ -1770,6 +1802,7 @@ impl ShorthandModelConfig for ModelConfig {
                 crate::providers::together::default_parse_think_blocks(),
             )?),
             "xai" => ProviderConfig::XAI(XAIProvider::new(model_name, None)?),
+            "nvidia_nim" => ProviderConfig::XAI(XAIProvider::new(model_name, None)?),
             #[cfg(any(test, feature = "e2e_tests"))]
             "dummy" => ProviderConfig::Dummy(DummyProvider::new(model_name, None)?),
             _ => {
