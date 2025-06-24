@@ -293,7 +293,7 @@ impl InferenceProvider for NvidiaNimProvider {
 }
 
 /// This struct defines the supported parameters for the nvidia_nim API
-/// See the [nvidia_nim API documentation](https://docs.x.ai/api/endpoints#chat-completions)
+/// See the [nvidia_nim API documentation](https://docs.api.nvidia.com/nim/reference/llm-apis)
 /// for more details.
 /// We are not handling logprobs, top_logprobs, n,
 /// logit_bias, seed, service_tier, stop, user or response_format.
@@ -528,8 +528,9 @@ mod tests {
             ..Default::default()
         };
 
-        let nvidia_nim_request = NvidiaNimRequest::new("grok-beta", &request_with_tools)
-            .expect("failed to create nvidia_nim Request during test");
+        let nvidia_nim_request =
+            NvidiaNimRequest::new("qwen/qwen2.5-coder-32b-instruct", &request_with_tools)
+                .expect("failed to create nvidia_nim Request during test");
 
         assert_eq!(nvidia_nim_request.messages.len(), 1);
         assert_eq!(nvidia_nim_request.temperature, Some(0.5));
@@ -574,8 +575,9 @@ mod tests {
             ..Default::default()
         };
 
-        let nvidia_nim_request = NvidiaNimRequest::new("grok-beta", &request_with_tools)
-            .expect("failed to create nvidia_nim Request");
+        let nvidia_nim_request =
+            NvidiaNimRequest::new("qwen/qwen2.5-coder-32b-instruct", &request_with_tools)
+                .expect("failed to create nvidia_nim Request");
 
         assert_eq!(nvidia_nim_request.messages.len(), 2);
         assert_eq!(nvidia_nim_request.temperature, Some(0.5));
@@ -682,7 +684,8 @@ mod tests {
                 response_time: Duration::from_secs(0),
             },
             raw_request: serde_json::to_string(
-                &NvidiaNimRequest::new("grok-beta", &generic_request).unwrap(),
+                &NvidiaNimRequest::new("qwen/qwen2.5-coder-32b-instruct", &generic_request)
+                    .unwrap(),
             )
             .unwrap(),
             generic_request: &generic_request,

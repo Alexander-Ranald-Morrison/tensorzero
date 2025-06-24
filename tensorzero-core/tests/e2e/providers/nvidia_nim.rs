@@ -1,0 +1,96 @@
+use std::collections::HashMap;
+
+use crate::providers::common::{E2ETestProvider, E2ETestProviders};
+
+crate::generate_provider_tests!(get_providers);
+crate::generate_batch_inference_tests!(get_providers);
+
+async fn get_providers() -> E2ETestProviders {
+    let credentials = match std::env::var("NVIDIA_NIM_API_KEY") {
+        Ok(key) => HashMap::from([("nvidia_nim_api_key".to_string(), key)]),
+        Err(_) => HashMap::new(),
+    };
+
+    let standard_providers = vec![E2ETestProvider {
+        supports_batch_inference: false,
+        variant_name: "nvidia_nim".to_string(),
+        model_name: "qwen/qwen2.5-coder-32b-instruct".into(),
+        model_provider_name: "nvidia_nim".into(),
+        credentials: HashMap::new(),
+    }];
+
+    let extra_body_providers = vec![E2ETestProvider {
+        supports_batch_inference: false,
+        variant_name: "nvidia_nim-extra-body".to_string(),
+        model_name: "qwen/qwen2.5-coder-32b-instruct".into(),
+        model_provider_name: "nvidia_nim".into(),
+        credentials: HashMap::new(),
+    }];
+
+    let bad_auth_extra_headers = vec![E2ETestProvider {
+        supports_batch_inference: false,
+        variant_name: "nvidia_nim-extra-headers".to_string(),
+        model_name: "qwen/qwen2.5-coder-32b-instruct".into(),
+        model_provider_name: "nvidia_nim".into(),
+        credentials: HashMap::new(),
+    }];
+
+    let json_providers = vec![
+        E2ETestProvider {
+            supports_batch_inference: false,
+            variant_name: "nvidia_nim".to_string(),
+            model_name: "qwen/qwen2.5-coder-32b-instruct".into(),
+            model_provider_name: "nvidia_nim".into(),
+            credentials: HashMap::new(),
+        },
+        E2ETestProvider {
+            supports_batch_inference: false,
+            variant_name: "nvidia_nim-strict".to_string(),
+            model_name: "qwen/qwen2.5-coder-32b-instruct".into(),
+            model_provider_name: "nvidia_nim".into(),
+            credentials: HashMap::new(),
+        },
+    ];
+
+    let json_mode_off_providers = vec![E2ETestProvider {
+        supports_batch_inference: false,
+        variant_name: "nvidia_nim_json_mode_off".to_string(),
+        model_name: "qwen/qwen2.5-coder-32b-instruct".into(),
+        model_provider_name: "nvidia_nim".into(),
+        credentials: HashMap::new(),
+    }];
+
+    let inference_params_providers = vec![E2ETestProvider {
+        supports_batch_inference: false,
+        variant_name: "nvidia_nim".to_string(),
+        model_name: "qwen/qwen2.5-coder-32b-instruct".into(),
+        model_provider_name: "nvidia_nim".into(),
+        credentials,
+    }];
+
+    let shorthand_providers = vec![E2ETestProvider {
+        supports_batch_inference: false,
+        variant_name: "nvidia_nim-shorthand".to_string(),
+        model_name: "nvidia_nim::qwen/qwen2.5-coder-32b-instruct".into(),
+        model_provider_name: "nvidia_nim".into(),
+        credentials: HashMap::new(),
+    }];
+
+    E2ETestProviders {
+        simple_inference: standard_providers.clone(),
+        extra_body_inference: extra_body_providers,
+        bad_auth_extra_headers,
+        reasoning_inference: vec![],
+        inference_params_inference: inference_params_providers,
+        inference_params_dynamic_credentials: vec![],
+        tool_use_inference: standard_providers.clone(),
+        tool_multi_turn_inference: standard_providers.clone(),
+        dynamic_tool_use_inference: standard_providers.clone(),
+        parallel_tool_use_inference: vec![],
+        json_mode_inference: json_providers,
+        json_mode_off_inference: json_mode_off_providers.clone(),
+        image_inference: vec![],
+        pdf_inference: vec![],
+        shorthand_inference: shorthand_providers.clone(),
+    }
+}

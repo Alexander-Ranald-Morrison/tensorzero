@@ -453,6 +453,22 @@ routing = ["together"]
 type = "together"
 model_name = "deepseek-ai/DeepSeek-R1"
 
+[models."qwen/qwen2.5-coder-32b-instruct"]
+routing = ["nvidia_nim"]
+
+[models."qwen/qwen2.5-coder-32b-instruct".providers.nvidia_nim]
+type = "nvidia_nim"
+model_name = "qwen/qwen2.5-coder-32b-instruct"
+
+[models."qwen/qwen2.5-coder-32b-instruct-dynamic"]
+routing = ["nvidia_nim"]
+
+
+[models."qwen/qwen2.5-coder-32b-instruct-dynamic".providers.nvidia_nim]
+type = "nvidia_nim"
+model_name = "qwen/qwen2.5-coder-32b-instruct"
+api_key_location = "dynamic::nvidia_nim_api_key"
+
 ## OpenRouter
 
 [models.gpt_4_1_mini_openrouter]
@@ -1509,6 +1525,38 @@ model = "deepseek-r1"
 system_template = "../../fixtures/config/functions/basic_test/prompt/system_template.minijinja"
 max_tokens = 800
 
+[functions.basic_test.variants.nvidia_nim]
+type = "chat_completion"
+model = "qwen/qwen2.5-coder-32b-instruct"
+system_template = "../../fixtures/config/functions/basic_test/prompt/system_template.minijinja"
+max_tokens = 100
+
+[functions.basic_test.variants.nvidia_nim-extra-body]
+type = "chat_completion"
+model = "qwen/qwen2.5-coder-32b-instruct"
+system_template = "../../fixtures/config/functions/basic_test/prompt/system_template.minijinja"
+max_tokens = 100
+extra_body = [{ pointer = "/temperature", value = 0.123 }]
+
+[functions.basic_test.variants.nvidia_nim-extra-headers]
+type = "chat_completion"
+model = "qwen/qwen2.5-coder-32b-instruct"
+system_template = "../../fixtures/config/functions/basic_test/prompt/system_template.minijinja"
+max_tokens = 100
+extra_headers = [{ name = "Authorization", value = "Bearer invalid_nvidia_nim_auth" }]
+
+[functions.basic_test.variants.nvidia_nim-dynamic]
+type = "chat_completion"
+model = "qwen/qwen2.5-coder-32b-instruct-dynamic"
+system_template = "../../fixtures/config/functions/basic_test/prompt/system_template.minijinja"
+max_tokens = 100
+
+[functions.basic_test.variants.nvidia_nim-shorthand]
+type = "chat_completion"
+model = "nvidia_nim::qwen/qwen2.5-coder-32b-instruct"
+system_template = "../../fixtures/config/functions/basic_test/prompt/system_template.minijinja"
+max_tokens = 100
+
 [functions.basic_test.variants.flaky]
 type = "chat_completion"
 model = "flaky_basic_test"
@@ -2072,6 +2120,22 @@ user_template = "../../fixtures/config/functions/json_success/prompt/user_templa
 json_mode = "strict"
 max_tokens = 100
 
+[functions.json_success.variants.nvidia_nim]
+type = "chat_completion"
+model = "qwen/qwen2.5-coder-32b-instruct"
+system_template = "../../fixtures/config/functions/json_success/prompt/system_template.minijinja"
+user_template = "../../fixtures/config/functions/json_success/prompt/user_template.minijinja"
+json_mode = "on"
+max_tokens = 100
+
+[functions.json_success.variants.nvidia_nim-strict]
+type = "chat_completion"
+model = "qwen/qwen2.5-coder-32b-instruct"
+system_template = "../../fixtures/config/functions/json_success/prompt/system_template.minijinja"
+user_template = "../../fixtures/config/functions/json_success/prompt/user_template.minijinja"
+json_mode = "strict"
+max_tokens = 100
+
 [functions.json_success.variants.chain_of_thought]
 type = "experimental_chain_of_thought"
 model = "dummy::json_cot"
@@ -2235,6 +2299,14 @@ max_tokens = 100
 [functions.json_success.variants.xai_json_mode_off]
 type = "chat_completion"
 model = "grok_2_1212"
+system_template = "../../fixtures/config/functions/basic_test/prompt/system_template.minijinja"
+user_template = "../../fixtures/config/functions/json_success/prompt/user_template.minijinja"
+json_mode = "off"
+max_tokens = 100
+
+[functions.json_success.variants.nvidia_nim_json_mode_off]
+type = "chat_completion"
+model = "qwen/qwen2.5-coder-32b-instruct"
 system_template = "../../fixtures/config/functions/basic_test/prompt/system_template.minijinja"
 user_template = "../../fixtures/config/functions/json_success/prompt/user_template.minijinja"
 json_mode = "off"
@@ -2677,6 +2749,22 @@ max_tokens = 100
 [functions.dynamic_json.variants.xai-strict]
 type = "chat_completion"
 model = "grok_2_1212"
+system_template = "../../fixtures/config/functions/dynamic_json/prompt/system_template.minijinja"
+user_template = "../../fixtures/config/functions/dynamic_json/prompt/user_template.minijinja"
+max_tokens = 100
+json_mode = "strict"
+
+[functions.dynamic_json.variants.nvidia-nim]
+type = "chat_completion"
+model = "qwen/qwen2.5-coder-32b-instruct"
+system_template = "../../fixtures/config/functions/dynamic_json/prompt/system_template.minijinja"
+user_template = "../../fixtures/config/functions/dynamic_json/prompt/user_template.minijinja"
+json_mode = "on"
+max_tokens = 100
+
+[functions.dynamic_json.variants.nvidia-nim-strict]
+type = "chat_completion"
+model = "qwen/qwen2.5-coder-32b-instruct"
 system_template = "../../fixtures/config/functions/dynamic_json/prompt/system_template.minijinja"
 user_template = "../../fixtures/config/functions/dynamic_json/prompt/user_template.minijinja"
 max_tokens = 100
