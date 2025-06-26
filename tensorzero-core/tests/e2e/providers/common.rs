@@ -1707,6 +1707,15 @@ pub async fn test_bad_auth_extra_headers_with_provider_and_stream(
             // check that an error occurs
             assert!(!res["error"].as_str().unwrap().is_empty());
         }
+        "nvidia_nim" => {
+            assert!(
+                res["error"]
+                    .as_str()
+                    .unwrap()
+                    .contains("Authentication failed"),
+                "Unexpected error: {res}"
+            )
+        }
         _ => {
             panic!("Got error: {res}");
         }

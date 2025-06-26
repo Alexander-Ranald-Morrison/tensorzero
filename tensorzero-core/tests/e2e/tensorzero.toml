@@ -453,20 +453,20 @@ routing = ["together"]
 type = "together"
 model_name = "deepseek-ai/DeepSeek-R1"
 
-[models."qwen/qwen2.5-coder-32b-instruct"]
+[models."google/gemma-3-1b-it"]
 routing = ["nvidia_nim"]
 
-[models."qwen/qwen2.5-coder-32b-instruct".providers.nvidia_nim]
+[models."google/gemma-3-1b-it".providers.nvidia_nim]
 type = "nvidia_nim"
-model_name = "qwen/qwen2.5-coder-32b-instruct"
+model_name = "google/gemma-3-1b-it"
 
-[models."qwen/qwen2.5-coder-32b-instruct-dynamic"]
+[models."google/gemma-3-1b-it-dynamic"]
 routing = ["nvidia_nim"]
 
 
-[models."qwen/qwen2.5-coder-32b-instruct-dynamic".providers.nvidia_nim]
+[models."google/gemma-3-1b-it-dynamic".providers.nvidia_nim]
 type = "nvidia_nim"
-model_name = "qwen/qwen2.5-coder-32b-instruct"
+model_name = "google/gemma-3-1b-it"
 api_key_location = "dynamic::nvidia_nim_api_key"
 
 ## OpenRouter
@@ -1527,33 +1527,33 @@ max_tokens = 800
 
 [functions.basic_test.variants.nvidia_nim]
 type = "chat_completion"
-model = "qwen/qwen2.5-coder-32b-instruct"
+model = "google/gemma-3-1b-it"
 system_template = "../../fixtures/config/functions/basic_test/prompt/system_template.minijinja"
 max_tokens = 100
 
 [functions.basic_test.variants.nvidia_nim-extra-body]
 type = "chat_completion"
-model = "qwen/qwen2.5-coder-32b-instruct"
+model = "google/gemma-3-1b-it"
 system_template = "../../fixtures/config/functions/basic_test/prompt/system_template.minijinja"
 max_tokens = 100
 extra_body = [{ pointer = "/temperature", value = 0.123 }]
 
 [functions.basic_test.variants.nvidia_nim-extra-headers]
 type = "chat_completion"
-model = "qwen/qwen2.5-coder-32b-instruct"
+model = "google/gemma-3-1b-it"
 system_template = "../../fixtures/config/functions/basic_test/prompt/system_template.minijinja"
 max_tokens = 100
 extra_headers = [{ name = "Authorization", value = "Bearer invalid_nvidia_nim_auth" }]
 
 [functions.basic_test.variants.nvidia_nim-dynamic]
 type = "chat_completion"
-model = "qwen/qwen2.5-coder-32b-instruct-dynamic"
+model = "google/gemma-3-1b-it-dynamic"
 system_template = "../../fixtures/config/functions/basic_test/prompt/system_template.minijinja"
 max_tokens = 100
 
 [functions.basic_test.variants.nvidia_nim-shorthand]
 type = "chat_completion"
-model = "nvidia_nim::qwen/qwen2.5-coder-32b-instruct"
+model = "nvidia_nim::google/gemma-3-1b-it"
 system_template = "../../fixtures/config/functions/basic_test/prompt/system_template.minijinja"
 max_tokens = 100
 
@@ -2122,7 +2122,7 @@ max_tokens = 100
 
 [functions.json_success.variants.nvidia_nim]
 type = "chat_completion"
-model = "qwen/qwen2.5-coder-32b-instruct"
+model = "google/gemma-3-1b-it"
 system_template = "../../fixtures/config/functions/json_success/prompt/system_template.minijinja"
 user_template = "../../fixtures/config/functions/json_success/prompt/user_template.minijinja"
 json_mode = "on"
@@ -2130,7 +2130,7 @@ max_tokens = 100
 
 [functions.json_success.variants.nvidia_nim-strict]
 type = "chat_completion"
-model = "qwen/qwen2.5-coder-32b-instruct"
+model = "google/gemma-3-1b-it"
 system_template = "../../fixtures/config/functions/json_success/prompt/system_template.minijinja"
 user_template = "../../fixtures/config/functions/json_success/prompt/user_template.minijinja"
 json_mode = "strict"
@@ -2306,7 +2306,7 @@ max_tokens = 100
 
 [functions.json_success.variants.nvidia_nim_json_mode_off]
 type = "chat_completion"
-model = "qwen/qwen2.5-coder-32b-instruct"
+model = "google/gemma-3-1b-it"
 system_template = "../../fixtures/config/functions/basic_test/prompt/system_template.minijinja"
 user_template = "../../fixtures/config/functions/json_success/prompt/user_template.minijinja"
 json_mode = "off"
@@ -2754,17 +2754,17 @@ user_template = "../../fixtures/config/functions/dynamic_json/prompt/user_templa
 max_tokens = 100
 json_mode = "strict"
 
-[functions.dynamic_json.variants.nvidia-nim]
+[functions.dynamic_json.variants.nvidia_nim]
 type = "chat_completion"
-model = "qwen/qwen2.5-coder-32b-instruct"
+model = "google/gemma-3-1b-it"
 system_template = "../../fixtures/config/functions/dynamic_json/prompt/system_template.minijinja"
 user_template = "../../fixtures/config/functions/dynamic_json/prompt/user_template.minijinja"
 json_mode = "on"
 max_tokens = 100
 
-[functions.dynamic_json.variants.nvidia-nim-strict]
+[functions.dynamic_json.variants.nvidia_nim-strict]
 type = "chat_completion"
-model = "qwen/qwen2.5-coder-32b-instruct"
+model = "google/gemma-3-1b-it"
 system_template = "../../fixtures/config/functions/dynamic_json/prompt/system_template.minijinja"
 user_template = "../../fixtures/config/functions/dynamic_json/prompt/user_template.minijinja"
 max_tokens = 100

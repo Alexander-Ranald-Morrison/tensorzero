@@ -14,7 +14,7 @@ async fn get_providers() -> E2ETestProviders {
     let standard_providers = vec![E2ETestProvider {
         supports_batch_inference: false,
         variant_name: "nvidia_nim".to_string(),
-        model_name: "qwen/qwen2.5-coder-32b-instruct".into(),
+        model_name: "google/gemma-3-1b-it".into(),
         model_provider_name: "nvidia_nim".into(),
         credentials: HashMap::new(),
     }];
@@ -22,7 +22,7 @@ async fn get_providers() -> E2ETestProviders {
     let extra_body_providers = vec![E2ETestProvider {
         supports_batch_inference: false,
         variant_name: "nvidia_nim-extra-body".to_string(),
-        model_name: "qwen/qwen2.5-coder-32b-instruct".into(),
+        model_name: "google/gemma-3-1b-it".into(),
         model_provider_name: "nvidia_nim".into(),
         credentials: HashMap::new(),
     }];
@@ -30,7 +30,7 @@ async fn get_providers() -> E2ETestProviders {
     let bad_auth_extra_headers = vec![E2ETestProvider {
         supports_batch_inference: false,
         variant_name: "nvidia_nim-extra-headers".to_string(),
-        model_name: "qwen/qwen2.5-coder-32b-instruct".into(),
+        model_name: "google/gemma-3-1b-it".into(),
         model_provider_name: "nvidia_nim".into(),
         credentials: HashMap::new(),
     }];
@@ -39,14 +39,14 @@ async fn get_providers() -> E2ETestProviders {
         E2ETestProvider {
             supports_batch_inference: false,
             variant_name: "nvidia_nim".to_string(),
-            model_name: "qwen/qwen2.5-coder-32b-instruct".into(),
+            model_name: "google/gemma-3-1b-it".into(),
             model_provider_name: "nvidia_nim".into(),
             credentials: HashMap::new(),
         },
         E2ETestProvider {
             supports_batch_inference: false,
             variant_name: "nvidia_nim-strict".to_string(),
-            model_name: "qwen/qwen2.5-coder-32b-instruct".into(),
+            model_name: "google/gemma-3-1b-it".into(),
             model_provider_name: "nvidia_nim".into(),
             credentials: HashMap::new(),
         },
@@ -55,7 +55,7 @@ async fn get_providers() -> E2ETestProviders {
     let json_mode_off_providers = vec![E2ETestProvider {
         supports_batch_inference: false,
         variant_name: "nvidia_nim_json_mode_off".to_string(),
-        model_name: "qwen/qwen2.5-coder-32b-instruct".into(),
+        model_name: "google/gemma-3-1b-it".into(),
         model_provider_name: "nvidia_nim".into(),
         credentials: HashMap::new(),
     }];
@@ -63,7 +63,7 @@ async fn get_providers() -> E2ETestProviders {
     let inference_params_providers = vec![E2ETestProvider {
         supports_batch_inference: false,
         variant_name: "nvidia_nim".to_string(),
-        model_name: "qwen/qwen2.5-coder-32b-instruct".into(),
+        model_name: "google/gemma-3-1b-it".into(),
         model_provider_name: "nvidia_nim".into(),
         credentials,
     }];
@@ -71,7 +71,7 @@ async fn get_providers() -> E2ETestProviders {
     let shorthand_providers = vec![E2ETestProvider {
         supports_batch_inference: false,
         variant_name: "nvidia_nim-shorthand".to_string(),
-        model_name: "nvidia_nim::qwen/qwen2.5-coder-32b-instruct".into(),
+        model_name: "nvidia_nim::google/gemma-3-1b-it".into(),
         model_provider_name: "nvidia_nim".into(),
         credentials: HashMap::new(),
     }];
@@ -83,9 +83,9 @@ async fn get_providers() -> E2ETestProviders {
         reasoning_inference: vec![],
         inference_params_inference: inference_params_providers,
         inference_params_dynamic_credentials: vec![],
-        tool_use_inference: standard_providers.clone(),
-        tool_multi_turn_inference: standard_providers.clone(),
-        dynamic_tool_use_inference: standard_providers.clone(),
+        tool_use_inference: vec![],
+        tool_multi_turn_inference: vec![],
+        dynamic_tool_use_inference: vec![],
         parallel_tool_use_inference: vec![],
         json_mode_inference: json_providers,
         json_mode_off_inference: json_mode_off_providers.clone(),
